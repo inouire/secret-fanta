@@ -15,6 +15,7 @@ class MainCommand extends Command{
         $this
             ->setName('reindeer:unleash')
             ->setDescription('Organise a secret santa and send emails')
+            ->addOption('bypass',null,InputOption::VALUE_OPTIONAL,'Send all email to this address instead')
             ->addOption('dry',null,InputOption::VALUE_NONE,'If set, no email will be sent');
     }
 
@@ -31,12 +32,9 @@ class MainCommand extends Command{
         
         $output->writeln('--------------------------------------------');
         
-        // shuffle array and display it again
+        // shuffle array and recap
         $output->writeln('Shuffling participants list:');
-        
         $random_configuration = $this->getRandomConfiguration($index);
-       
-        // recap configuration
         foreach($random_configuration as $participant){
             $output->writeln(' - <info>'.$participant['name'].' -> '.$participant['target']['name'].'</info>');
         }
@@ -47,14 +45,30 @@ class MainCommand extends Command{
         $output->writeln('Unleashing reindeers...');
         foreach($random_configuration as $participant){
             $output->writeln(' - Inform <info>'.$participant['name'].'</info> that he has to offer a gift to <info>'.$participant['target']['name'].'</info>');
+            
+            // build email information
+            $subject = 'Instructions mission père Noël';
+            $from = array('pere_noel@pole-nord.gouv'=>'Le père noël');
+            $to = array($participant['email']=>$participant['name']);
+            $content='Ho ho ho, salut '.$participant['name'].' c\'est le père noël.\r\n 
+                      Je suis chargé de te dire que tu as été tiré au sort pour faire un cadeau à '.$participant['target']['name'].
+                      '. Attention cependant, personne n\'est au courant de la mission que je te confie et aucune autre trace de ce tirage au sort n\'a été conservée 
+                      à part cet email. Donc ne le perd pas ! Allez j\'y vais, faut je j\'aille fouetter mes lutins qui font trop de pauses café.';
+            
+            // prepare email
             $transport = \Swift_MailTransport::newInstance();
             $mailer = \Swift_Mailer::newInstance($transport);  
             $message = \Swift_Message::newInstance()
-                        ->setSubject('Secret santa test')
-                        ->setFrom(array('john@doe.com' => 'John Doe'))
-                        ->setTo(array('receiver@domain.org', 'other@domain.org' => 'A name'))
-                        ->setBody('This is a test for secret santa application');
-            $result = $mailer->send($message);      
+                        ->setSubject($subject)
+                        ->setFrom($from)
+                        ->setTo($to)
+                        ->setBody($content);
+            
+            // send email
+            $result = $mailer->send($message);
+            if($result>0){
+                $output->writeln('<error>Error while sending email to '.$participant['email'].'</error>');
+            }   
         }
         
     }
