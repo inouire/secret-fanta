@@ -49,7 +49,11 @@ class MainCommand extends Command{
             // build email information
             $subject = 'Instructions mission père Noël';
             $from = array('pere_noel@gmail.com'=>'Le père noël');
-            $to = array($participant['email']=>$participant['name']);
+            if($input->getOption('bypass')!=null){
+                $to = array($input->getOption('bypass')=>$participant['name']);
+            }else{
+                $to = array($participant['email']=>$participant['name']);
+            }
             $content='Ho ho ho, salut '.$participant['name'].' c\'est le père noël. 
 Je suis chargé de te dire que tu as été tiré au sort pour faire un cadeau à '.$participant['target']['name'].'.
 Attention cependant, personne n\'est au courant de la mission que je te confie et aucune autre trace de ce tirage au sort n\'a été conservée 
