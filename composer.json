@@ -1,0 +1,15 @@
+{
+    "name": "inouire/secret-fanta",
+    "license": "GPLv3",
+    "type": "project",
+    "description": "PHP secret santa",
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    
+    "require": {
+        "swiftmailer/swiftmailer": "@stable",
+        "symfony/console": "@stable",
+        "symfony/yaml": "@stable"
+    }
+}
