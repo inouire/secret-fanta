@@ -13,7 +13,7 @@ Requirements:
 
 Clone project repository with git:
 ```bash
-git clone git@github.com:inouire/secret-fanta.git
+git clone https://github.com/inouire/secret-fanta.git
 ```
 
 Install dependencies with composer:
