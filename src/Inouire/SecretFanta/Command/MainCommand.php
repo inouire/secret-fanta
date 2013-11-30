@@ -48,12 +48,13 @@ class MainCommand extends Command{
             
             // build email information
             $subject = 'Instructions mission père Noël';
-            $from = array('pere_noel@pole-nord.gouv'=>'Le père noël');
+            $from = array('pere_noel@gmail.com'=>'Le père noël');
             $to = array($participant['email']=>$participant['name']);
-            $content='Ho ho ho, salut '.$participant['name'].' c\'est le père noël.\r\n 
-                      Je suis chargé de te dire que tu as été tiré au sort pour faire un cadeau à '.$participant['target']['name'].
-                      '. Attention cependant, personne n\'est au courant de la mission que je te confie et aucune autre trace de ce tirage au sort n\'a été conservée 
-                      à part cet email. Donc ne le perd pas ! Allez j\'y vais, faut je j\'aille fouetter mes lutins qui font trop de pauses café.';
+            $content='Ho ho ho, salut '.$participant['name'].' c\'est le père noël. 
+Je suis chargé de te dire que tu as été tiré au sort pour faire un cadeau à '.$participant['target']['name'].'.
+Attention cependant, personne n\'est au courant de la mission que je te confie et aucune autre trace de ce tirage au sort n\'a été conservée 
+à part cet email. Donc ne le perd pas ! 
+Allez j\'y vais, faut je j\'aille fouetter mes lutins qui font trop de pauses café.';
             
             // prepare email
             $transport = \Swift_MailTransport::newInstance();
@@ -66,7 +67,7 @@ class MainCommand extends Command{
             
             // send email
             $result = $mailer->send($message);
-            if($result>0){
+            if(!$result){
                 $output->writeln('<error>Error while sending email to '.$participant['email'].'</error>');
             }   
         }
