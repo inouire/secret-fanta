@@ -15,7 +15,7 @@ class MainCommand extends Command
     {
         $this
             ->setName('reindeer:unleash')
-            ->setDescription('Generate a secret santa config and send emails')
+            ->setDescription('Organise a secret santa and send emails')
             ->addOption('dry',null,InputOption::VALUE_NONE,'If set, no email will be sent');
     }
 
@@ -33,11 +33,22 @@ class MainCommand extends Command
         
         $output->writeln('--------------------------------------------');
         
-        //shuffle array and display it again
+        // shuffle array and display it again
         $output->writeln('Shuffling participants list:');
         shuffle($index);
+
+        
+        // affect target to each participant
+        $nb_participants=count($index);
+        $first_participant=$index[0];
+        for( $k=0 ; $k<($nb_participants-1); $k++){
+            $index[$k]['target']=$index[$k+1];
+        }
+        $index[$nb_participants-1]['target']=$first_participant;
+        
+        // recap configuration
         foreach($index as $participant){
-            $output->writeln(' - <info>'.$participant['name'].'</info> <comment>('.$participant['email'].')</comment>');
+            $output->writeln(' - <info>'.$participant['name'].' -> '.$participant['target']['name'].'</info>');
         }
         
         // send email
