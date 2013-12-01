@@ -10,6 +10,7 @@ Requirements:
 - PHP 5.3+
 - git
 - composer (see http://getcomposer.org)
+- a working mail server
 
 Clone project repository with git:
 ```bash
@@ -24,6 +25,7 @@ composer install
 
 ### Use it ###
 
+#### Configure ####
 
 Complete config file `conf/participants.yml` with the list of participants and the couples if any
 
@@ -46,6 +48,8 @@ couples:
 
 Modify email template file `conf/mail_content.html` to match your needs.
 Just be sure to have `{{name}}` and `{{target}}` keywords so that the email will contain the useful information.
+
+#### Run ####
 
 Try your configuration with a bypass email (all emails will be sent to the bypass address)
 ```bash
