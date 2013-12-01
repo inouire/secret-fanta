@@ -44,6 +44,9 @@ couples:
     - ["Sylvain", "Sylvette"]
 ```
 
+Modify email template file `conf/mail_content.html` to match your needs.
+Just be sure to have `{{name}}` and `{{target}}` keywords so that the email will contain the useful information.
+
 Try your configuration with a bypass email (all emails will be sent to the bypass address)
 ```bash
 php santa.php reindeer:unleash --bypass=your@email
