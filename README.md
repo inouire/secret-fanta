@@ -51,10 +51,11 @@ Just be sure to have `{{name}}` and `{{target}}` keywords so that the email will
 
 #### Run ####
 
-Try your configuration with a bypass email (all emails will be sent to the bypass address)
+Try your configuration in debug mode and with a bypass email (all emails will be sent to the bypass address)
 ```bash
-php santa.php reindeer:unleash --bypass=your@email
+php santa.php reindeer:unleash --bypass=your@email --debug
 ```
+The purpose of debug mode is to display who offers a gift to who, and should not be used for the real sending as the secret would be lost.
 
 Check your inbox, and if everything looks good you can launch the program for real:
 ```bash
