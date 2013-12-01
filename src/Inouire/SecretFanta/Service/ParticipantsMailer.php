@@ -43,20 +43,16 @@ class ParticipantsMailer {
             $to_email = array($participant['email'] => $participant['name']);
         }
         
-        // set content
-        $content='Ho ho ho, salut '.$participant['name'].' c\'est le père noël. 
-            
-Je suis chargé de te dire que tu as été tiré au sort pour faire un cadeau à '.$participant['target']['name'].'.
-Attention cependant, personne n\'est au courant de la mission que je te confie et aucune autre trace de ce tirage au sort n\'a été conservée  à part cet email. Donc ne le perd pas ! 
-
-Allez j\'y vais, faut je j\'aille fouetter mes lutins qui font trop de pauses café.';
-
+        // replace name and target name in html template
+        $content = str_replace ( '{{name}}',   $participant['name']           , $this->content_template );
+        $content = str_replace ( '{{target}}', $participant['target']['name'] , $content );
+        
         // prepare message
         $message = \Swift_Message::newInstance()
                         ->setSubject($this->subject)
                         ->setFrom($this->from_email)
                         ->setTo($to_email)
-                        ->setBody($this->content_template,'text/html');
+                        ->setBody($content,'text/html');
             
         // send email
          return $this->mailer->send($message);
