@@ -34,7 +34,7 @@ class ParticipantsManager {
      * Get the list of participants, as an array of name => email
      */
     public function getParticipantsList(){
-        return $this->participants;
+        return $this->participants['people'];
     }
     
     /**
@@ -44,6 +44,7 @@ class ParticipantsManager {
     public function generateConfigurationWithoutCouple(){
         $has_couple = true;
         while($has_couple){
+            print('.');
             $config = $this->generateConfiguration();
             $has_couple = $this->configurationHasCouple($config);
         }
@@ -76,8 +77,25 @@ class ParticipantsManager {
      * Search for couples in a santa configuration
      */
     private function configurationHasCouple($config){
-        // Look in couple index
-        // TODO
+        
+        // iterate on each participant to detect couple
+        foreach($config as $participant){
+            
+            // get participant information
+            $name = $participant['name'];
+            $target_name = $participant['target']['name'];
+            
+            //check if the two people are in the couple base
+            if(    array_key_exists($name, $this->couples_index) 
+                && array_key_exists($target_name, $this->couples_index) ){
+                //check if they belong to the same couple
+                if( $this->couples_index[$name] == $this->couples_index[$target_name]){
+                    return true;
+                }
+            }
+        }
+        
+        // nothing detected
         return false;
     }
 

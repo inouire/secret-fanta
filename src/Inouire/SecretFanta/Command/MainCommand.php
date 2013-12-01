@@ -32,10 +32,12 @@ class MainCommand extends Command{
         }
         
         // generate configuration, without any couple
+        $output->write('Generating configuration that avoid couples...');
         $config = $pm->generateConfigurationWithoutCouple();
+        $output->writeln('<info> done</info>');
                 
         // send email to each participant to inform him who is is gift target
-        $output->writeln('Unleashing reindeers...');
+        $output->writeln('Unleashing reindeers:');
         foreach($config as $participant){
             
             $output->writeln(' - Inform <info>'.$participant['name'].'</info> that he has to offer a gift to <info>'.$participant['target']['name'].'</info>');
