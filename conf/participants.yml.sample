@@ -1,7 +1,14 @@
-#list of participants following format "name": email
+# information about the participants
 
-"Jean-Claude": jean-claude@van-damme.com
-"Chuck": chuck@norris.com
-"Silvester": silvester@stallone.com
-    
-    
+#list of participants with format "name": email
+people:
+    "Zorglub": zorglub@dupuis.fr.fake
+    "Sylvain": sylvain@chaumiere.fr.fake
+    "Sylvette": sylvette@chaumiere.fr.fake
+    "Mickey": mickey@disney.com.fake
+    "Minnie": minnie@disney.com.fake
+
+# list of couples with format - ["name1", "name2"]
+couples:
+    - ["Mickey", "Minnie"]
+    - ["Sylvain", "Sylvette"]
