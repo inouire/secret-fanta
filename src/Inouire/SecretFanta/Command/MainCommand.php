@@ -49,11 +49,13 @@ class MainCommand extends Command{
         // send email to each participant to inform him who is is gift target
         foreach($config as $participant){
             if($input->getOption('debug')){
+                $name = $participant['name'];
                 $target_name = $participant['target']['name'];
             }else{
+                $name = '****';
                 $target_name = '****';
             }
-            $output->writeln(' - Inform <info>'.$participant['name'].'</info> that he has to offer a gift to <info>'.$target_name.'</info>');
+            $output->writeln(' - Inform <info>'.$name.'</info> that he has to offer a gift to <info>'.$target_name.'</info>');
             if(!$mailer->emailParticipant($participant)){
                 $output->writeln('<error>Error while sending email to '.$participant['email'].'</error>');
             }
