@@ -13,10 +13,11 @@ class ParticipantsMailer {
     // TODO make it configurable
     private $subject='Instructions mission père Noël';
     private $from_email=array('pere_noel@gmail.com'=>'Le père noël');
+    private $content_template;
             
     public function __construct(){
         $transport = \Swift_MailTransport::newInstance();
-        $this->mailer = \Swift_Mailer::newInstance($transport); 
+        $this->mailer = \Swift_Mailer::newInstance($transport);
     }
     
     /**
@@ -24,6 +25,10 @@ class ParticipantsMailer {
      */
     public function setBypassEmail($email){
         $this->bypass_email = $email;
+    }
+    
+    public function loadContentTemplate($file){
+        $this->content_template = file_get_contents($file);
     }
     
     /**
@@ -51,7 +56,7 @@ Allez j\'y vais, faut je j\'aille fouetter mes lutins qui font trop de pauses ca
                         ->setSubject($this->subject)
                         ->setFrom($this->from_email)
                         ->setTo($to_email)
-                        ->setBody($content);
+                        ->setBody($this->content_template,'text/html');
             
         // send email
          return $this->mailer->send($message);
