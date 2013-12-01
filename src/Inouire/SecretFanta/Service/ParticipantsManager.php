@@ -13,17 +13,21 @@ class ParticipantsManager {
     private $couples_index;
     
     public function __construct($file_name){
-        // load yml content
+        // load content of yml config file
         $this->participants = Yaml::parse(file_get_contents($file_name));
         
         // build index
         $this->index=array();
-        foreach($this->participants as $name => $email){
+        foreach($this->participants['people'] as $name => $email){
             $this->index[] =  array('name'=>$name, 'email' => $email);
         }
         
         // build couples index
-        // TODO
+        $this->couples_index = array();
+        foreach($this->participants['couples'] as $couple_name => $people){
+            $this->couples_index[$people[0]] = $couple_name; 
+            $this->couples_index[$people[1]] = $couple_name; 
+        }
     }
     
     /**
