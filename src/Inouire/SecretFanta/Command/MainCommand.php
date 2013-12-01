@@ -40,6 +40,7 @@ class MainCommand extends Command{
         // load mailer     
         $output->writeln('Unleashing reindeers:');
         $mailer = new ParticipantsMailer();
+        $mailer->setBypassEmail($input->getOption('bypass'));
                 
         // send email to each participant to inform him who is is gift target
         foreach($config as $participant){
