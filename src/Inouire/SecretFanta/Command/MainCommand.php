@@ -2,6 +2,7 @@
 
 namespace Inouire\SecretFanta\Command;
 
+use Inouire\SecretFanta\Service\ParticipantsManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,25 +22,21 @@ class MainCommand extends Command{
 
     protected function execute(InputInterface $input, OutputInterface $output){
         
-        // load list of participants and transform it into an indexed array
+        // load participants manager (participants + couples)
         $output->writeln('Loading participants:');
-        $participants = Yaml::parse(file_get_contents('conf/participants.yml'));
-        $index=array();
-        foreach($participants as $name => $email){
-            $index[] =  array('name'=>$name, 'email' => $email);
+        $pm = new ParticipantsManager('conf/participants.yml');
+        
+        // recap list of participants
+        foreach($pm->getParticipantsList() as $name => $email){
             $output->writeln(' - <info>'.$name.'</info> <comment>('.$email.')</comment>');
         }
         
-        // shuffle array and recap
-        $output->writeln('Shuffling participants list...');
-        $random_configuration = $this->getRandomConfiguration($index);
-        /*foreach($random_configuration as $participant){
-            $output->writeln(' - <info>'.$participant['name'].' -> '.$participant['target']['name'].'</info>');
-        }*/
-        
+        // generate configuration, without any couple
+        $config = $pm->generateConfigurationWithoutCouple();
+                
         // send email to each participant to inform him who is is gift target
         $output->writeln('Unleashing reindeers...');
-        foreach($random_configuration as $participant){
+        foreach($config as $participant){
             
             $output->writeln(' - Inform <info>'.$participant['name'].'</info> that he has to offer a gift to <info>'.$participant['target']['name'].'</info>');
             
@@ -74,25 +71,6 @@ Allez j\'y vais, faut je j\'aille fouetter mes lutins qui font trop de pauses ca
             }   
         }
         
-    }
-    
-    /**
-     * Build a random secret santa configuration from an index of participants
-     */
-    private function getRandomConfiguration($index){
-        
-        // shuffle index
-        shuffle($index);
-        
-        // affect a target to each participant
-        $nb_participants=count($index);
-        $first_participant=$index[0];
-        for( $k=0 ; $k<($nb_participants-1); $k++){
-            $index[$k]['target']=$index[$k+1];
-        }
-        $index[$nb_participants-1]['target']=$first_participant;
-        
-        return $index;
     }
     
 }
