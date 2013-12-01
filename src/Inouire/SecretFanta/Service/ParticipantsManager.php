@@ -24,9 +24,9 @@ class ParticipantsManager {
         
         // build couples index
         $this->couples_index = array();
-        foreach($this->participants['couples'] as $couple_name => $people){
-            $this->couples_index[$people[0]] = $couple_name; 
-            $this->couples_index[$people[1]] = $couple_name; 
+        foreach($this->participants['couples'] as $key => $people){
+            $this->couples_index[$people[0]] = $key; 
+            $this->couples_index[$people[1]] = $key; 
         }
     }
     
