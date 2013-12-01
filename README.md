@@ -25,10 +25,31 @@ composer install
 ### Use it ###
 
 
-Complete config file `conf/participants.yml` with the list of participants 
-for your secret santa with format `"name": email`
+Complete config file `conf/participants.yml` with the list of participants and the couples if any
 
-Launch program:
+```yaml
+# information about the participants
+
+#list of participants with format "name": email
+people:
+    "Zorglub": zorglub@dupuis.fr.fake
+    "Sylvain": sylvain@chaumiere.fr.fake
+    "Sylvette": sylvette@chaumiere.fr.fake
+    "Mickey": mickey@disney.com.fake
+    "Minnie": minnie@disney.com.fake
+
+# list of couples with format - ["name1", "name2"]
+couples:
+    - ["Mickey", "Minnie"]
+    - ["Sylvain", "Sylvette"]
+```
+
+Try your configuration with a bypass email (all emails will be sent to the bypass address)
+```bash
+php santa.php reindeer:unleash --bypass=your@email
+```
+
+Check your inbox, and if everything looks good you can launch the program for real:
 ```bash
 php santa.php reindeer:unleash
 ```
