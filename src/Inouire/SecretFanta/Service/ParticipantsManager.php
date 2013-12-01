@@ -38,6 +38,13 @@ class ParticipantsManager {
     }
     
     /**
+     * Get the list of couples, as an array of [name1,name2]
+     */
+    public function getCouplesList(){
+        return $this->participants['couples'];
+    }
+    
+    /**
      * Generate a santa configuration from the list of participants,
      * which does not contain any couple relation
      */

@@ -27,9 +27,12 @@ class MainCommand extends Command{
         $output->writeln('Loading participants:');
         $pm = new ParticipantsManager('conf/participants.yml');
         
-        // recap list of participants
+        // recap list of participants and couples
         foreach($pm->getParticipantsList() as $name => $email){
             $output->writeln(' - <info>'.$name.'</info> <comment>('.$email.')</comment>');
+        }
+        foreach($pm->getCouplesList() as $couple){
+            $output->writeln(' - <info>'.$couple[0].'</info> and <info>'.$couple[1].'</info> are in couple');
         }
         
         // generate configuration, without any couple
