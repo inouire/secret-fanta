@@ -18,7 +18,7 @@ class MainCommand extends Command{
             ->setName('reindeer:unleash')
             ->setDescription('Organise a secret santa and send emails')
             ->addOption('bypass',null,InputOption::VALUE_OPTIONAL,'Send all email to this address instead')
-            ->addOption('dry',null,InputOption::VALUE_NONE,'If set, no email will be sent (not implemented yet)');
+            ->addOption('debug',null,InputOption::VALUE_NONE,'If set, all information about will be displayed. Use it for debug only');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output){
@@ -45,7 +45,12 @@ class MainCommand extends Command{
                 
         // send email to each participant to inform him who is is gift target
         foreach($config as $participant){
-            $output->writeln(' - Inform <info>'.$participant['name'].'</info> that he has to offer a gift to <info>'.$participant['target']['name'].'</info>');
+            if($input->getOption('debug')){
+                $target_name = $participant['target']['name'];
+            }else{
+                $target_name = '****';
+            }
+            $output->writeln(' - Inform <info>'.$participant['name'].'</info> that he has to offer a gift to <info>'.$target_name.'</info>');
             if(!$mailer->emailParticipant($participant)){
                 $output->writeln('<error>Error while sending email to '.$participant['email'].'</error>');
             }
