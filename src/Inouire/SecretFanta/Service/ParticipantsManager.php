@@ -5,26 +5,43 @@ namespace Inouire\SecretFanta\Service;
 use Symfony\Component\Yaml\Yaml;
         
 class ParticipantsManager {
+        
+    private $people;
+     
+    private $couples;
     
-    private $participants;
-    
-    private $index;
+    private $people_index;
     
     private $couples_index;
     
     public function __construct($file_name){
-        // load content of yml config file
-        $this->participants = Yaml::parse(file_get_contents($file_name));
         
-        // build index
-        $this->index=array();
-        foreach($this->participants['people'] as $name => $email){
-            $this->index[] =  array('name'=>$name, 'email' => $email);
+        // load content of yml config file
+        $participants = Yaml::parse(file_get_contents($file_name));
+        
+        // get people
+        if(array_key_exists('people', $participants) &&  $participants['people'] != null && count($participants['people']) >= 3 ){
+            $this->people = $participants['people'];
+        }else{
+            throw new \Exception('There must be at least three participants to the secret santa');
+        }
+        
+        // get couples
+        if(array_key_exists('couples', $participants) &&  $participants['couples'] != null){
+            $this->couples = $participants['couples'];
+        }else{
+            $this->couples = array();
+        }
+        
+        // build people index
+        $this->people_index=array();
+        foreach($this->people as $name => $email){
+            $this->people_index[] =  array('name'=>$name, 'email' => $email);
         }
         
         // build couples index
         $this->couples_index = array();
-        foreach($this->participants['couples'] as $key => $people){
+        foreach($this->couples as $key => $people){
             $this->couples_index[$people[0]] = $key; 
             $this->couples_index[$people[1]] = $key; 
         }
@@ -34,18 +51,14 @@ class ParticipantsManager {
      * Get the list of participants, as an array of name => email
      */
     public function getParticipantsList(){
-        return $this->participants['people'];
+        return $this->people;
     }
     
     /**
      * Get the list of couples, as an array of [name1,name2]
      */
     public function getCouplesList(){
-        if(array_key_exists('couples', $this->participants) &&  $this->participants['couples'] != null){
-            return $this->participants['couples'];
-        }else{
-            return array();
-        }
+        return $this->couples;
     }
     
     /**
@@ -68,7 +81,7 @@ class ParticipantsManager {
     public function generateConfiguration(){
         
         // create a copy of the index
-        $temp_index = $this->index;
+        $temp_index = $this->people_index;
         
         // shuffle index
         shuffle($temp_index);
