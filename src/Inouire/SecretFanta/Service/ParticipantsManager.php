@@ -41,7 +41,7 @@ class ParticipantsManager {
      * Get the list of couples, as an array of [name1,name2]
      */
     public function getCouplesList(){
-        if(array_key_exists('couples', $this->participants)){
+        if(array_key_exists('couples', $this->participants) &&  $this->participants['couples'] != null){
             return $this->participants['couples'];
         }else{
             return array();
